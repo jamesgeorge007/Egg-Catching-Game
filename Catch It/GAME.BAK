@@ -6,23 +6,29 @@
 
 void game_play()
 {
-  int i, crashed = 0, x , basket_x = getmaxx()/2-80, basket_y = getmaxy()/2+80, pos = 0;
+  int i, speed = 5, x, crashed = 0, random_color = 1, random_style = 1, basket_x = getmaxx()/2-80, basket_y = getmaxy()/2+80, egg_x = 50, egg_y = 45, pos = 0;
   char key;
 
   setcolor(WHITE);
 
   // Boundary
 
-  line(0, 30, getmaxx(), 30);
+/*  line(0, 30, getmaxx(), 30);
   line(getmaxx(), 30, getmaxx(), getmaxy()/2+170);
   line(0, 30, 0, getmaxy()/2+170);
   //sector(basket_x, basket_y, 180, 360, 90, 90);
-  line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170);
+  line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170); */
+
+  rectangle(0, 0, getmaxx(), getmaxy());
 
   // Main Game Loop.
 
    while(crashed == 0)
   {
+
+  setfillstyle(random_style, random_color);
+
+  fillellipse(egg_x, egg_y, 30, 45);
 
   line(0, 30, getmaxx(), 30);
   line(getmaxx(), 30, getmaxx(), getmaxy()/2+170);
@@ -44,20 +50,59 @@ void game_play()
 	}
        }
 
-     x = basket_x + pos*2;
+      x = basket_x + pos*2;
 
-     if(x<=90)
+     // Restricting the basket within the space.
+
+     if(x <= 90)
      {
        x = 90;
      }
 
-     else if(x>=getmaxx()-90)
+     else if(x >= getmaxx()-90)
      {
        x = getmaxx() - 90;
      }
      setfillstyle(6, BROWN);
 
      sector(x, basket_y, 180, 360, 90, 90);
+     //Checking whether the egg falls within the basket.
+
+     if(egg_x == x && egg_y == basket_y)
+     {
+	outtextxy(50, 80, "Crashed");
+	delay(1000);
+	crashed = 1;
+     }
+
+     egg_y += speed;
+
+     // Placing egg to the initial position after crossing the border.
+
+     if(egg_y >= getmaxy() - 90)
+     {
+	egg_x = random(getmaxx() - 30);
+
+	if(egg_x <= 30)
+	{
+	  egg_x += 30;
+	}
+
+	egg_y = 45;
+
+	if(speed >= 25)
+	{
+	  speed = 25;
+	}
+	else
+	{
+	  speed += 1;
+	}
+
+	random_color = random(15);
+	random_style = random(12);
+
+     }
 
      delay(40);
     cleardevice();
@@ -75,7 +120,7 @@ void intro()
 
   // Boundary
 
-  line(0, 30, getmaxx(), 30);
+ /*   line(0, 30, getmaxx(), 30);
   line(getmaxx(), 30, getmaxx(), getmaxy()/2+170);
   line(0, 30, 0, getmaxy()/2+170);
   line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170);
@@ -122,7 +167,7 @@ void intro()
   {
    bar(80, 360, i, 390);
    delay(5);
-  }
+  } */
 
   cleardevice();
 
@@ -132,5 +177,6 @@ void intro()
 void main()
 {
   intro();
+ // game_play();
 
 }
