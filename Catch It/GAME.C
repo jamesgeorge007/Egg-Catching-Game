@@ -4,9 +4,20 @@
 #include<conio.h>
 #include<stdlib.h>
 
+
+void instructions()
+{
+  cleardevice();
+}
+
+void showHighScore()
+{
+  cleardevice();
+}
+
 void game_play()
 {
-  int i, speed = 5, x, crashed = 0, random_color = 1, random_style = 1, basket_x = getmaxx()/2-80, basket_y = getmaxy()/2+80, egg_x = 50, egg_y = 45, pos = 0;
+  int i, speed = 5, k = 5, x, crashed = 0, random_color = 1, random_style = 1, basket_x = getmaxx()/2-80, basket_y = getmaxy()/2+80, egg_x = 50, egg_y = 45, pos = 0;
   char key;
 
   setcolor(WHITE);
@@ -40,10 +51,10 @@ void game_play()
 	switch(getch())
 	{
 	  case 'a':
-		pos-=5;
+		pos -= k;
 		break;
 	  case 'd':
-		 pos+=5;
+		 pos += k;
 		 break;
 	  default:
 		 crashed=1;
@@ -66,9 +77,10 @@ void game_play()
      setfillstyle(6, BROWN);
 
      sector(x, basket_y, 180, 360, 90, 90);
+
      //Checking whether the egg falls within the basket.
 
-     if(egg_x >= x && egg_x <= x+90)
+     if(egg_x + 60 >= x && egg_x - 90 <= x + 30 && egg_y + 45 >= basket_y && egg_y - 45 <= basket_y + 90)
      {
 	outtextxy(50, 80, "Crashed");
 	delay(1000);
@@ -99,6 +111,15 @@ void game_play()
 	  speed += 1;
 	}
 
+	if(k <= 10)
+	{
+	  k += 1;
+	}
+	else
+	{
+	  k = 10;
+	}
+
 	random_color = random(15);
 	random_style = random(12);
 
@@ -109,6 +130,72 @@ void game_play()
      }
   }
 
+
+void main_menu()
+{
+     char option;
+
+     cleardevice();
+
+     setcolor(WHITE);
+
+  // Boundary.
+
+  rectangle(0, 0, getmaxx(), getmaxy());
+
+  settextstyle(4, 0, 7);
+
+  outtextxy(getmaxx()/2 - 160, 20, "Main Menu");
+
+  settextstyle(7, 0, 4);
+
+  outtextxy(30, getmaxy()/2 - 100, "1. Play Now");
+
+  outtextxy(30, getmaxy()/2 - 40, "2. Instructions");
+
+  outtextxy(30, getmaxy()/2 + 20, "3. High Score");
+
+  outtextxy(30, getmaxy()/2 + 80, "Enter your option:");
+
+  option = getche();
+
+  switch(option)
+  {
+
+    case '1':
+
+	 game_play();
+	 break;
+
+    case '2':
+
+	 instructions();
+	 break;
+
+    case '3':
+
+	 showHighScore();
+	 break;
+
+    default:
+
+	 settextstyle(8, 0, 5);
+
+	 setfillstyle(0, BLACK);
+
+	 bar(30, getmaxy()/2 + 80, getmaxx() - 60, getmaxy()/2 + 140);
+
+	 line(50, getmaxy()/2 + 120, getmaxx() - 100, getmaxy()/2 + 120);
+	 line(50, getmaxy()/2 + 120, 50, getmaxy() - 40);
+	 outtextxy(50, getmaxy()/2 + 120, "Invalid option given");
+	 line(getmaxx() - 100, getmaxy()/2 +120, getmaxx() - 100, getmaxy() - 40);
+	 line(50, getmaxy() - 40, getmaxx() - 100, getmaxy() - 40);
+
+	 delay(1000);
+	 main_menu();
+  }
+}
+
 void intro()
 {
   int gd=DETECT, gm, i, color=0;
@@ -118,9 +205,11 @@ void intro()
 
   initgraph(&gd, &gm, "../bgi");
 
+  cleardevice();
+
   // Boundary
 
- /*   line(0, 30, getmaxx(), 30);
+   line(0, 30, getmaxx(), 30);
   line(getmaxx(), 30, getmaxx(), getmaxy()/2+170);
   line(0, 30, 0, getmaxy()/2+170);
   line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170);
@@ -167,11 +256,13 @@ void intro()
   {
    bar(80, 360, i, 390);
    delay(5);
-  } */
+  }
 
-  cleardevice();
+ // cleardevice();
 
-  game_play();
+  main_menu();
+
+  //game_play();
 }
 
 void main()
