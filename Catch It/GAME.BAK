@@ -1,19 +1,58 @@
+
+/*
+	*------------------------*
+	 Developer : James George
+	*------------------------*
+*/
+
+// Uses Files to store High Score.
+
+// Including the required header files to use library functions.
+
 #include<stdio.h>
 #include<graphics.h>
 #include<dos.h>
 #include<conio.h>
 #include<stdlib.h>
 
+/*
+	*-- Global Variables   --*
+*/
+
+/*  Global vaiables are declared here accessible within any functions.
+    Changing their value locally within a function doesn't change this value assigned globally.
+*/
+
+int repeat = 1; // Prevents the Main Menu animation by changing the value locally when any other key other than the required one is being pressed.
+
+/*
+	*-- Methods  --*
+*/
+
+// Functions representing various phases of the game.
+
+// Instructions Window.
 
 void instructions()
 {
   cleardevice();
 }
 
+// Retrieves and shows the current High Score.
+
 void showHighScore()
 {
   cleardevice();
 }
+
+// Sets new High Score.
+
+void setHighScore()
+{
+  cleardevice();
+}
+
+// Game Play Mechanism.
 
 void game_play()
 {
@@ -130,20 +169,36 @@ void game_play()
      }
   }
 
+// Main Menu as the name suggests.
 
 void main_menu()
 {
      char option;
 
+     int i;
+
      cleardevice();
 
      setcolor(WHITE);
 
+
+  settextstyle(4, 0, 7);
+
+
+
+  if(repeat == 1)
+  {
+  for(i=getmaxy()+30; i>=20; i--)
+  {
+  outtextxy(getmaxx()/2 - 160, i, "Main Menu");
+  delay(1);
+  cleardevice();
+  }
+  }
+
   // Boundary.
 
   rectangle(0, 0, getmaxx(), getmaxy());
-
-  settextstyle(4, 0, 7);
 
   outtextxy(getmaxx()/2 - 160, 20, "Main Menu");
 
@@ -191,10 +246,13 @@ void main_menu()
 	 line(getmaxx() - 100, getmaxy()/2 +120, getmaxx() - 100, getmaxy() - 40);
 	 line(50, getmaxy() - 40, getmaxx() - 100, getmaxy() - 40);
 
+	 repeat = 0;
 	 delay(1000);
 	 main_menu();
   }
 }
+
+// Intro window.
 
 void intro()
 {
@@ -250,7 +308,7 @@ void intro()
 
   outtextxy(40, 300, "Loading...");
 
-  setfillstyle(5, BLUE);
+  setfillstyle(7, BLUE);
 
   for(i=90; i<=getmaxx()-80; i++)
   {
