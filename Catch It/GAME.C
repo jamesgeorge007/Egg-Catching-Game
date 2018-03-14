@@ -1,8 +1,4 @@
-/*
-	*------------------------*
-	 Developer : James George
-	*------------------------*
-*/
+
 
 // Uses Files to store High Score.
 
@@ -201,7 +197,7 @@ void main_menu()
 
   outtextxy(getmaxx()/2 - 160, 20, "Main Menu");
 
-  settextstyle(7, 0, 4);
+  settextstyle(8, 0, 5);
 
   outtextxy(30, getmaxy()/2 - 100, "1. Play Now");
 
@@ -255,7 +251,7 @@ void main_menu()
 
 void intro()
 {
-  int gd=DETECT, gm, i, color=0;
+  int gd=DETECT, gm, i, j, color=0;
 
   // Autodetect
   // Initializing the graphics driver as well as mode.
@@ -271,6 +267,23 @@ void intro()
   line(0, 30, 0, getmaxy()/2+170);
   line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170);
 
+
+
+  settextstyle(6, 0, 8);
+
+  for(i=-180,j=getmaxx()+30;i<=getmaxx()+40;i++,j--)
+  {
+	outtextxy(i, getmaxy()/2-80, "Welcome");
+
+	outtextxy(j, getmaxy()/2, "To");
+
+	if(i>=getmaxx()/2-100 && i<=getmaxx()/2+40)
+	delay(30);
+
+	else
+	delay(5);
+	cleardevice();
+  }
   settextstyle(7, 0, 8);
 
    for(i=-80; i<=80; i++)
@@ -307,7 +320,7 @@ void intro()
 
   outtextxy(40, 300, "Loading...");
 
-  setfillstyle(7, BLUE);
+  setfillstyle(4, BLUE);
 
   for(i=90; i<=getmaxx()-80; i++)
   {
