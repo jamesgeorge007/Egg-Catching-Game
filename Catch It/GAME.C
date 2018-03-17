@@ -1,8 +1,4 @@
-/*
-	*------------------------*
-	 Developer : James George
-	*------------------------*
-*/
+
 
 // Uses Files to store High Score.
 
@@ -55,8 +51,8 @@ void setHighScore()
 
 void game_play()
 {
-  int i, speed = 5, k = 5, x, crashed = 0, random_color = 1, random_style = 1, basket_x = getmaxx()/2-80, basket_y = getmaxy()/2+80, egg_x = 50, egg_y = 45, pos = 0;
-  char key;
+  int i, speed = 5, k = 5, x, crashed = 0, life = 3, score = 0, random_color = 1, random_style = 1, basket_x = getmaxx()/2-80, basket_y = getmaxy()/2+80, egg_x = 50, egg_y = 45, pos = 0;
+  char key, life_display[10], score_display[10];
 
   setcolor(WHITE);
 
@@ -75,7 +71,11 @@ void game_play()
    while(crashed == 0)
   {
 
+  // Random fill styles and colors for eggs.
+
   setfillstyle(random_style, random_color);
+
+  // Ccnstructs eggs and fills it with the fill pattern provided.
 
   fillellipse(egg_x, egg_y, 30, 45);
 
@@ -83,6 +83,14 @@ void game_play()
   line(getmaxx(), 30, getmaxx(), getmaxy()/2+170);
   line(0, 30, 0, getmaxy()/2+170);
   line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170);
+
+  sprintf(life_display, "Life: %d", life);
+  sprintf(score_display, "Score: %d", score);
+
+  settextstyle(8, 0, 3);
+
+  outtextxy(getmaxx()-120, 0, score_display);
+  outtextxy(0, 0, life_display);
 
 	if(kbhit())
        {
@@ -116,13 +124,25 @@ void game_play()
 
      sector(x, basket_y, 180, 360, 90, 90);
 
-     //Checking whether the egg falls within the basket.
+     // Checking whether egg falls within the basket.
 
-     if(egg_x + 60 >= x && egg_x - 90 <= x + 30 && egg_y + 45 >= basket_y && egg_y - 45 <= basket_y + 90)
+     if(egg_x + 80 >= x && egg_x - 100 <= x + 30 && egg_y + 45 >= basket_y && egg_y - 45 <= basket_y + 90)
      {
-	outtextxy(50, 80, "Crashed");
-	delay(1000);
-	crashed = 1;
+	// Game play ends only when a black egg falls on the basket.
+
+	if(random_color == 0)
+	{
+		life -= 1;
+		outtextxy(50, 80, "Crashed");
+		delay(1000);
+		crashed = 1;
+	}
+
+	else
+	{
+		egg_y = getmaxy();
+		score += 1;
+	}
      }
 
      egg_y += speed;
@@ -178,10 +198,10 @@ void main_menu()
 
      cleardevice();
 
-     setcolor(WHITE);
+     setcolor(6);
 
 
-  settextstyle(4, 0, 7);
+  settextstyle(7, 0, 7);
 
 
 
@@ -197,11 +217,13 @@ void main_menu()
 
   // Boundary.
 
+  setcolor(WHITE);
+
   rectangle(0, 0, getmaxx(), getmaxy());
 
   outtextxy(getmaxx()/2 - 160, 20, "Main Menu");
 
-  settextstyle(7, 0, 4);
+  settextstyle(8, 0, 5);
 
   outtextxy(30, getmaxy()/2 - 100, "1. Play Now");
 
@@ -255,7 +277,7 @@ void main_menu()
 
 void intro()
 {
-  int gd=DETECT, gm, i, color=0;
+  int gd=DETECT, gm, i, j, color=0;
 
   // Autodetect
   // Initializing the graphics driver as well as mode.
@@ -267,16 +289,41 @@ void intro()
   // Boundary
 
    line(0, 30, getmaxx(), 30);
-  line(getmaxx(), 30, getmaxx(), getmaxy()/2+170);
-  line(0, 30, 0, getmaxy()/2+170);
-  line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170);
+   line(getmaxx(), 30, getmaxx(), getmaxy()/2+170);
+   line(0, 30, 0, getmaxy()/2+170);
+   line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170);
 
+
+
+  settextstyle(10, 0, 5);
+
+  setcolor(5);
+
+  for(i=-180,j=getmaxx()+30;i<=getmaxx()+40;i++,j--)
+  {
+	setcolor(color);
+
+	color = random(15);
+
+	outtextxy(i, getmaxy()/2-80, "Welcome");
+
+	outtextxy(j, getmaxy()/2, "To");
+
+	if(i>=getmaxx()/2-150 && i<=getmaxx()/2-50)
+	delay(30);
+
+	else
+	delay(2);
+	cleardevice();
+  }
   settextstyle(7, 0, 8);
+
+/*  color=0;
 
    for(i=-80; i<=80; i++)
    {
      setcolor(color);
-     outtextxy(80, i, "Catch It");
+     outtextxy(140, i, "Catch It");
 
      if(color>15)
 	color=0;
@@ -286,14 +333,27 @@ void intro()
      cleardevice();
    }
 
+   */
+
+   for(i=-120, j=getmaxy()+50; i<=160; i++, j--)
+   {
+       color = random(15);
+       setcolor(color);
+       outtextxy(140, i, "Catch");
+       outtextxy(400, j, "It");
+
+       delay(15);
+       cleardevice();
+   }
+
    setcolor(getmaxcolor());
 
-   outtextxy(80, 80, "Catch It");
+   outtextxy(140, 80, "Catch It");
 
-  settextstyle(1, 0, 4);
+   settextstyle(1, 0, 4);
 
-  setcolor(RED);
-  outtextxy(40, 300, "Press any key to continue...");
+   setcolor(RED);
+   outtextxy(40, 300, "Press any key to continue...");
 
   getch();
 
@@ -307,7 +367,7 @@ void intro()
 
   outtextxy(40, 300, "Loading...");
 
-  setfillstyle(7, BLUE);
+  setfillstyle(4, BLUE);
 
   for(i=90; i<=getmaxx()-80; i++)
   {
