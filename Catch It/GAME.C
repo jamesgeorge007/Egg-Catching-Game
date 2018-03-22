@@ -20,9 +20,19 @@
 
 int repeat = 1; // Prevents the Main Menu animation by changing the value locally when any other key other than the required one is being pressed.
 
+FILE *file_read, *file_write; // File pointers
+
 /*
 	*-- Methods  --*
 */
+
+// Function prototypes so that they can be accessed by any functions as per required.
+
+void instructions();
+void setHighScore(int);
+void main_menu();
+void showHighScore();
+void game_play();
 
 // Functions representing various phases of the game.
 
@@ -31,20 +41,87 @@ int repeat = 1; // Prevents the Main Menu animation by changing the value locall
 void instructions()
 {
   cleardevice();
+
+  settextstyle(7, 0, 5);
+
+  rectangle(0, 0, getmaxx(), getmaxy());
+
+  outtextxy(160, 130, "INSTRUCTIONS");
+
+  settextstyle(6, 0, 3);
+
+  outtextxy(20, 180, "1. Use A and D to move the basket either ways.");
+
+  outtextxy(20, 220, "2. Catch as many eggs as you can.");
+
+  outtextxy(20, 260, "3. Avoid black Eggs which would decrease your life.");
+
+  outtextxy(20, 300, "4. There are overall 3 lives available.");
+
+  outtextxy(20, 340, "5. You can always view the current High Score from the Main Menu.");
+
+  outtextxy(20, 380, "Press any key to return to the main menu.");
+
+  getch();
+
+  main_menu();
 }
 
-// Retrieves and shows the current High Score.
+// Retrieves and shows the current High Score from a text file.
 
 void showHighScore()
 {
+  int score;
+
+  char score_text[5];
+
   cleardevice();
+
+  settextstyle(7, 0, 6);
+
+  outtextxy(180, 150, "High Score");
+
+  file_read = fopen("score.txt","r");
+
+  score = (int) getc(file_read);
+
+  sprintf(score_text, "%d", score);
+
+  settextstyle(4, 0, 6);
+
+  outtextxy(getmaxx()/2-100, getmaxy()/2, score_text);
+
+  fclose(file_read);
+
+  settextstyle(6, 0, 4);
+
+  outtextxy(80, 320, "Press any key to return to the Main Menu.");
+
+  getch();
+
+  main_menu();
 }
 
 // Sets new High Score.
 
-void setHighScore()
+void setHighScore(int current_score)
 {
+  int current_high_score;
+
   cleardevice();
+
+  file_read = fopen("score.txt", "r");
+
+  current_high_score = (int) getc(file_read);
+
+  if(current_score > current_high_score)
+  {
+	file_write = fopen("score.txt", "w");
+	putc(current_score, file_write);
+	fclose(file_write);
+  }
+  fclose(file_read);
+
 }
 
 // Game Play Mechanism.
@@ -126,16 +203,22 @@ void game_play()
 
      // Checking whether egg falls within the basket.
 
-     if(egg_x + 80 >= x && egg_x - 100 <= x + 30 && egg_y + 45 >= basket_y && egg_y - 45 <= basket_y + 90)
+     if(egg_x + 80 >= x && egg_x - 100 <= x && egg_y + 45 >= basket_y && egg_y - 45 <= basket_y + 90)
      {
 	// Game play ends only when a black egg falls on the basket.
 
 	if(random_color == 0)
 	{
-		life -= 1;
-		outtextxy(50, 80, "Crashed");
-		delay(1000);
-		crashed = 1;
+		life--;
+
+	}
+
+	if(life==0)
+	{
+			setHighScore(score);
+			outtextxy(50, 80, "Crashed");
+			delay(1000);
+			crashed = 1;
 	}
 
 	else
@@ -190,6 +273,7 @@ void game_play()
 
 // Main Menu as the name suggests.
 
+
 void main_menu()
 {
      char option;
@@ -231,7 +315,9 @@ void main_menu()
 
   outtextxy(30, getmaxy()/2 + 20, "3. High Score");
 
-  outtextxy(30, getmaxy()/2 + 80, "Enter your option:");
+  outtextxy(30, getmaxy()/2 + 80, "4. Exit");
+
+  outtextxy(30, getmaxy()/2 + 140, "Enter your option:");
 
   option = getche();
 
@@ -252,6 +338,10 @@ void main_menu()
 
 	 showHighScore();
 	 break;
+
+    case '4':
+
+	 exit(0);
 
     default:
 
@@ -342,7 +432,7 @@ void intro()
        outtextxy(140, i, "Catch");
        outtextxy(400, j, "It");
 
-       delay(15);
+       delay(10);
        cleardevice();
    }
 
