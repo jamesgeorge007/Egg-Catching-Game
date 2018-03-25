@@ -20,6 +20,8 @@
 
 int repeat = 1; // Prevents the Main Menu animation by changing the value locally when any other key other than the required one is being pressed.
 
+int exit_from_game = 0; // Keeps track of certain animations that should happen only if user plays the game atleast once.
+
 FILE *file_read, *file_write; // File pointers
 
 /*
@@ -33,6 +35,7 @@ void setHighScore(int);
 void main_menu();
 void showHighScore();
 void game_play();
+void theEnd();
 
 // Functions representing various phases of the game.
 
@@ -42,25 +45,39 @@ void instructions()
 {
   cleardevice();
 
-  settextstyle(7, 0, 5);
+  settextstyle(7, 0, 6);
 
   rectangle(0, 0, getmaxx(), getmaxy());
 
-  outtextxy(160, 130, "INSTRUCTIONS");
+  outtextxy(80, 90, "INSTRUCTIONS");
 
-  settextstyle(6, 0, 3);
+  settextstyle(6, 0, 4);
 
-  outtextxy(20, 180, "1. Use A and D to move the basket either ways.");
+  setcolor(random(15));
 
-  outtextxy(20, 220, "2. Catch as many eggs as you can.");
+  outtextxy(10, 180, "1. Use A and D to move the basket either ways.");
 
-  outtextxy(20, 260, "3. Avoid black Eggs which would decrease your life.");
+  setcolor(random(15));
 
-  outtextxy(20, 300, "4. There are overall 3 lives available.");
+  outtextxy(10, 220, "2. Catch as many eggs as you can.");
 
-  outtextxy(20, 340, "5. You can always view the current High Score from the Main Menu.");
+  setcolor(random(15));
 
-  outtextxy(20, 380, "Press any key to return to the main menu.");
+  outtextxy(10, 260, "3. Avoid black Eggs which would decrease your life.");
+
+  setcolor(random(15));
+
+  outtextxy(10, 300, "4. There are overall 3 lives available.");
+
+  setcolor(random(15));
+
+  outtextxy(10, 340, "5. Press X to exit while on the game play.");
+
+  setcolor(random(15));
+
+  outtextxy(15, 380, "Press any key to return to the main menu.");
+
+  repeat = 0;
 
   getch();
 
@@ -77,9 +94,11 @@ void showHighScore()
 
   cleardevice();
 
+  setcolor(random(15));
+
   settextstyle(7, 0, 6);
 
-  outtextxy(180, 150, "High Score");
+  outtextxy(180, 130, "High Score");
 
   file_read = fopen("score.txt","r");
 
@@ -89,13 +108,15 @@ void showHighScore()
 
   settextstyle(4, 0, 6);
 
-  outtextxy(getmaxx()/2-100, getmaxy()/2, score_text);
+  outtextxy(getmaxx()/2-120, getmaxy()/2, score_text);
 
   fclose(file_read);
 
   settextstyle(6, 0, 4);
 
-  outtextxy(80, 320, "Press any key to return to the Main Menu.");
+  repeat = 0;
+
+  outtextxy(60, 320, "Press any key to return to the Main Menu.");
 
   getch();
 
@@ -131,14 +152,14 @@ void game_play()
   int i, speed = 5, k = 5, x, crashed = 0, life = 3, score = 0, random_color = 1, random_style = 1, basket_x = getmaxx()/2-80, basket_y = getmaxy()/2+80, egg_x = 50, egg_y = 45, pos = 0;
   char key, life_display[10], score_display[10];
 
-  setcolor(WHITE);
+  setcolor(15);
 
   // Boundary
 
-/*  line(0, 30, getmaxx(), 30);
+/*line(0, 30, getmaxx(), 30);
   line(getmaxx(), 30, getmaxx(), getmaxy()/2+170);
   line(0, 30, 0, getmaxy()/2+170);
-  //sector(basket_x, basket_y, 180, 360, 90, 90);
+  sector(basket_x, basket_y, 180, 360, 90, 90);
   line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170); */
 
   rectangle(0, 0, getmaxx(), getmaxy());
@@ -179,8 +200,9 @@ void game_play()
 	  case 'd':
 		 pos += k;
 		 break;
-	  default:
-		 crashed=1;
+	  case 'x':
+		main_menu();
+		break;
 	}
        }
 
@@ -197,7 +219,7 @@ void game_play()
      {
        x = getmaxx() - 90;
      }
-     setfillstyle(6, BROWN);
+     setfillstyle(5, 4);
 
      sector(x, basket_y, 180, 360, 90, 90);
 
@@ -216,15 +238,18 @@ void game_play()
 	if(life==0)
 	{
 			setHighScore(score);
-			outtextxy(50, 80, "Crashed");
-			delay(1000);
+			settextstyle(10, 0, 6);
+			setcolor(random(15));
+			outtextxy(getmaxx()/2-180,getmaxy()/2-130, "GAME OVER");
+			delay(3000);
 			crashed = 1;
+			main_menu();
 	}
 
 	else
 	{
 		egg_y = getmaxy();
-		score += 1;
+		score += random_color;
 	}
      }
 
@@ -266,10 +291,43 @@ void game_play()
 
      }
 
+     // Setting global variables accordingly to serve their purpose.
+     repeat = 0;
+     exit_from_game = 1;
+
      delay(40);
     cleardevice();
      }
   }
+
+// The Game Ends here.
+
+void theEnd()
+{
+  int i;
+
+  cleardevice();
+
+  setcolor(15);
+
+  // Borders
+
+  rectangle(0, 0, getmaxx(), getmaxy());
+
+  settextstyle(10, 0, 7);
+
+  setcolor(13);
+
+  outtextxy(120, 140, "THE END");
+
+  for(i=1;i<=1000;i++)
+  {
+   putpixel(random(getmaxx()),random(getmaxy()), random(15));
+   delay(20);
+  }
+  exit(0);
+
+}
 
 // Main Menu as the name suggests.
 
@@ -282,19 +340,15 @@ void main_menu()
 
      cleardevice();
 
-     setcolor(6);
-
-
-  settextstyle(7, 0, 7);
-
-
+     settextstyle(10, 0, 6);
 
   if(repeat == 1)
   {
   for(i=getmaxy()+30; i>=20; i--)
   {
-  outtextxy(getmaxx()/2 - 160, i, "Main Menu");
-  delay(1);
+  setcolor(random(15));
+  outtextxy(getmaxx()/2 - 180, i, "Main Menu");
+  delay(5);
   cleardevice();
   }
   }
@@ -305,17 +359,27 @@ void main_menu()
 
   rectangle(0, 0, getmaxx(), getmaxy());
 
-  outtextxy(getmaxx()/2 - 160, 20, "Main Menu");
+  outtextxy(getmaxx()/2 - 180, 20, "Main Menu");
 
   settextstyle(8, 0, 5);
 
+  setcolor(12);
+
   outtextxy(30, getmaxy()/2 - 100, "1. Play Now");
+
+  setcolor(10);
 
   outtextxy(30, getmaxy()/2 - 40, "2. Instructions");
 
+  setcolor(6);
+
   outtextxy(30, getmaxy()/2 + 20, "3. High Score");
 
+  setcolor(4);
+
   outtextxy(30, getmaxy()/2 + 80, "4. Exit");
+
+  setcolor(2);
 
   outtextxy(30, getmaxy()/2 + 140, "Enter your option:");
 
@@ -341,7 +405,12 @@ void main_menu()
 
     case '4':
 
-	 exit(0);
+	 if (exit_from_game == 0)
+	    exit(0);
+	 else
+	 theEnd();
+
+	 break;
 
     default:
 
@@ -367,7 +436,7 @@ void main_menu()
 
 void intro()
 {
-  int gd=DETECT, gm, i, j, color=0;
+  int gd=DETECT, gm, i, j, color=15;
 
   // Autodetect
   // Initializing the graphics driver as well as mode.
@@ -378,32 +447,37 @@ void intro()
 
   // Boundary
 
+   setcolor(random(15));
    line(0, 30, getmaxx(), 30);
+
+   setcolor(random(15));
    line(getmaxx(), 30, getmaxx(), getmaxy()/2+170);
+
+   setcolor(random(15));
    line(0, 30, 0, getmaxy()/2+170);
+
+   setcolor(random(15));
    line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170);
 
-
-
-  settextstyle(10, 0, 5);
-
-  setcolor(5);
+   settextstyle(10, 0, 5);
 
   for(i=-180,j=getmaxx()+30;i<=getmaxx()+40;i++,j--)
   {
 	setcolor(color);
-
-	color = random(15);
 
 	outtextxy(i, getmaxy()/2-80, "Welcome");
 
 	outtextxy(j, getmaxy()/2, "To");
 
 	if(i>=getmaxx()/2-150 && i<=getmaxx()/2-50)
-	delay(30);
+	{
+	color = random(15);
+	delay(40);
+	}
 
 	else
-	delay(2);
+	delay(1);
+
 	cleardevice();
   }
   settextstyle(7, 0, 8);
@@ -438,11 +512,11 @@ void intro()
 
    setcolor(getmaxcolor());
 
-   outtextxy(140, 80, "Catch It");
+   outtextxy(140, 160, "Catch It");
 
    settextstyle(1, 0, 4);
 
-   setcolor(RED);
+   setcolor(GREEN);
    outtextxy(40, 300, "Press any key to continue...");
 
   getch();
