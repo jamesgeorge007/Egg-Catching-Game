@@ -88,36 +88,47 @@ void instructions()
 
 void showHighScore()
 {
-  int score;
+  int score, i;
 
-  char score_text[5];
+  char score_display[5];
 
   cleardevice();
 
   setcolor(random(15));
 
-  settextstyle(10, 0, 7);
-
-  outtextxy(120, 60, "High Score");
-
   file_read = fopen("score.txt","r");
 
   fscanf(file_read, "%d", &score);
 
-  sprintf(score_text, "%d", score);
-
-  settextstyle(9, 0, 4);
-
   setcolor(15);
 
-  outtextxy(getmaxx()/2-75, getmaxy()/2, score_text);
+  for(i=0;i<=score;i++)
+  {
+  settextstyle(10, 0, 7);
+  outtextxy(120, 60, "High Score");
+
+  sprintf(score_display, "%d", i);
+  settextstyle(9, 0, 4);
+  outtextxy(getmaxx()/2-75, getmaxy()/2, score_display);
+
+  delay(3);
+  cleardevice();
+  }
 
   fclose(file_read);
 
-  settextstyle(6, 0, 4);
+  settextstyle(10, 0, 7);
 
   repeat = 0;
 
+  outtextxy(120, 60, "High Score");
+
+  sprintf(score_display, "%d", score);
+  settextstyle(9, 0, 4);
+
+  outtextxy(getmaxx()/2-75, getmaxy()/2, score_display);
+
+  settextstyle(6, 0, 4);
   outtextxy(60, 300, "Press any key to return to the Main Menu.");
 
   getch();
@@ -507,7 +518,9 @@ void main_menu()
 
 void intro()
 {
-  int gd=DETECT, gm, i, j, k,color=15, ellipse_x, ellipse_y, position;
+  int gd=DETECT, gm, i, j, k,color=15;
+
+  char score[25];
 
   // Autodetect
   // Initializing the graphics driver as well as mode.
@@ -554,70 +567,40 @@ void intro()
 
 	cleardevice();
   }
-  settextstyle(7, 0, 8);
 
-/*  color=0;
-
-   for(i=-80; i<=80; i++)
-
+   for(i=-60;i<=getmaxy()/2+15;i+=3)
    {
-     setcolor(color);
-     outtextxy(140, i, "Catch It");
-
-     if(color>15)
-	color=0;
-     else
-	color++;
-     delay(35);
-     cleardevice();
-   }
-
-   */
-   setfillstyle(1, 5);
-
-   for(i=-120;i<=getmaxy()/2-90;i++)
-   {
-    sector(getmaxx()/2-90, i*2, 180, 360, 90, 90);
-    delay(10);
+    setfillstyle(1, 7);
+    fillellipse(getmaxx()/2+60, i, 30, 45);
+    setfillstyle(1, 5);
+    sector(getmaxx()/2+15, getmaxy()/2+45, 180, 360, 90, 90);
+    delay(5);
     cleardevice();
    }
+   setcolor(15);
 
-    position = getmaxy()/2-300;
-
-    for(k=1;k<=3;k++)
-	{
-
-	 ellipse_x = random(getmaxx()-90);
-
-		if(ellipse_x<=90)
-		   ellipse_x += 90;
-
-	 ellipse_y = -30;
-
-	 for(j=-90;j<=position;j++)
-	    {
-		setfillstyle(1, k+3);
-
-		ellipse_y = j*12;
-
-		if(ellipse_y>=position)
-		    ellipse_y = getmaxy()+60;
-
-		fillellipse(ellipse_x, ellipse_y, 30, 45);
-
-		setfillstyle(1, k);
-
-		sector(ellipse_x, position, 180, 360, 90, 90);
-
-		delay(6);
-		cleardevice();
-	    }
-
-	}
-
-   delay(2000);
-
+   settextstyle(7, 0, 7);
+   outtextxy(getmaxx()/2, getmaxy()/2-100, "Life: 3");
+   delay(700);
    cleardevice();
+
+   settextstyle(7, 1, 7);
+   outtextxy(getmaxx()/2, getmaxy()/2-100, "Crashed");
+   delay(700);
+   cleardevice();
+
+   settextstyle(10, 0, 4);
+
+   for(i=0;i<=500;i++)
+   {
+   sprintf(score, "Score: %d", i);
+   setcolor(random(15));
+   outtextxy(getmaxx()/2-120, getmaxy()/2-80, score);
+   delay(5);
+   cleardevice();
+   }
+
+   settextstyle(7, 0, 8);
 
    for(i=-120, j=getmaxy()+50; i<=160; i++, j--)
    {
