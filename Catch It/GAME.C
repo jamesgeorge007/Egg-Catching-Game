@@ -2,7 +2,7 @@
 
 // Uses Files to store High Score.
 
-// Including the required header files to use library functions.
+// Including the required header files in which the library functions are defined.
 
 #include<stdio.h>
 #include<graphics.h>
@@ -49,33 +49,33 @@ void instructions()
 
   rectangle(0, 0, getmaxx(), getmaxy());
 
-  outtextxy(80, 90, "INSTRUCTIONS");
+  outtextxy(80, 40, "INSTRUCTIONS");
 
   settextstyle(6, 0, 4);
 
   setcolor(random(15));
 
-  outtextxy(10, 180, "1. Use A and D to move the basket either ways.");
+  outtextxy(7, 120, "1. Use A and D to move the basket either ways.");
 
   setcolor(random(15));
 
-  outtextxy(10, 220, "2. Catch as many eggs as you can.");
+  outtextxy(7, 160, "2. Catch as many eggs as you can.");
 
   setcolor(random(15));
 
-  outtextxy(10, 260, "3. Avoid black Eggs which would decrease your life.");
+  outtextxy(7, 200, "3. Avoid black colored Eggs.");
 
   setcolor(random(15));
 
-  outtextxy(10, 300, "4. There are overall 3 lives available.");
+  outtextxy(7, 240, "4. There are overall 3 lives available.");
 
   setcolor(random(15));
 
-  outtextxy(10, 340, "5. Press X to exit while on the game play.");
+  outtextxy(7, 280, "5. Press X to exit while on the game play.");
 
   setcolor(random(15));
 
-  outtextxy(15, 380, "Press any key to return to the main menu.");
+  outtextxy(20, 360, "Press any key to return to the main menu.");
 
   repeat = 0;
 
@@ -96,9 +96,9 @@ void showHighScore()
 
   setcolor(random(15));
 
-  settextstyle(7, 0, 6);
+  settextstyle(10, 0, 7);
 
-  outtextxy(180, 130, "High Score");
+  outtextxy(120, 60, "High Score");
 
   file_read = fopen("score.txt","r");
 
@@ -106,9 +106,11 @@ void showHighScore()
 
   sprintf(score_text, "%d", score);
 
-  settextstyle(4, 0, 6);
+  settextstyle(9, 0, 4);
 
-  outtextxy(getmaxx()/2-120, getmaxy()/2, score_text);
+  setcolor(15);
+
+  outtextxy(getmaxx()/2-75, getmaxy()/2, score_text);
 
   fclose(file_read);
 
@@ -116,7 +118,7 @@ void showHighScore()
 
   repeat = 0;
 
-  outtextxy(60, 320, "Press any key to return to the Main Menu.");
+  outtextxy(60, 300, "Press any key to return to the Main Menu.");
 
   getch();
 
@@ -150,9 +152,61 @@ void setHighScore(int current_score)
 void game_play()
 {
   int i, speed = 5, k = 5, x, crashed = 0, life = 3, score = 0, random_color = 1, random_style = 1, basket_x = getmaxx()/2-80, basket_y = getmaxy()/2+80, egg_x = 50, egg_y = 45, pos = 0;
-  char key, life_display[10], score_display[10];
+  char key, life_display[25], score_display[25], result[25];
+
+  // Intro count-down.
+
+  cleardevice();
+
+  setbkcolor(random(14));
 
   setcolor(15);
+
+  settextstyle(10, 0, 9);
+
+  outtextxy(240, 100, "1");
+
+  delay(1000);
+
+  cleardevice();
+
+  setbkcolor(random(14));
+
+  settextstyle(10, 0, 9);
+
+  outtextxy(240, 100, "2");
+
+  delay(1000);
+
+  cleardevice();
+
+  setbkcolor(random(14));
+
+  settextstyle(10, 0, 9);
+
+  outtextxy(240, 100, "3");
+
+  delay(1000);
+
+  cleardevice();
+
+  setbkcolor(15);
+
+  setcolor(9);
+
+  settextstyle(10, 0, 9);
+
+  outtextxy(220, 100, "Go!");
+
+  sound(2000);
+
+  delay(2000);
+
+  nosound();
+
+  setcolor(15);
+
+  setbkcolor(0);
 
   // Boundary
 
@@ -187,8 +241,8 @@ void game_play()
 
   settextstyle(8, 0, 3);
 
-  outtextxy(getmaxx()-120, 0, score_display);
-  outtextxy(0, 0, life_display);
+  outtextxy(getmaxx()-140, 0, score_display);
+  outtextxy(20, 0, life_display);
 
 	if(kbhit())
        {
@@ -238,10 +292,17 @@ void game_play()
 	if(life==0)
 	{
 			setHighScore(score);
+
+			sprintf(result, "Your Score is %d.", score);
 			settextstyle(10, 0, 6);
 			setcolor(random(15));
-			outtextxy(getmaxx()/2-180,getmaxy()/2-130, "GAME OVER");
+			outtextxy(getmaxx()/2-280,getmaxy()/2-130, "GAME OVER");
+
+			settextstyle(6, 0, 6);
+			outtextxy(getmaxx()/2-200, getmaxy()/2, result);
+
 			delay(3000);
+
 			crashed = 1;
 			main_menu();
 	}
@@ -249,7 +310,11 @@ void game_play()
 	else
 	{
 		egg_y = getmaxy();
-		score += random_color;
+
+		if (random_color!=0)
+		score += speed;
+		else
+		score -= speed;
 	}
      }
 
@@ -320,10 +385,10 @@ void theEnd()
 
   outtextxy(120, 140, "THE END");
 
-  for(i=1;i<=1000;i++)
+  for(i=1;i<=800;i++)
   {
    putpixel(random(getmaxx()),random(getmaxy()), random(15));
-   delay(20);
+   delay(25);
   }
   exit(0);
 
@@ -445,7 +510,7 @@ void intro()
 
   cleardevice();
 
-  // Boundary
+  /* Boundary
 
    setcolor(random(15));
    line(0, 30, getmaxx(), 30);
@@ -457,13 +522,16 @@ void intro()
    line(0, 30, 0, getmaxy()/2+170);
 
    setcolor(random(15));
-   line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170);
+   line(0, getmaxy()/2+170, getmaxx(), getmaxy()/2+170); */
 
    settextstyle(10, 0, 5);
 
   for(i=-180,j=getmaxx()+30;i<=getmaxx()+40;i++,j--)
   {
+
 	setcolor(color);
+
+	color = 15;
 
 	outtextxy(i, getmaxy()/2-80, "Welcome");
 
@@ -510,7 +578,7 @@ void intro()
        cleardevice();
    }
 
-   setcolor(getmaxcolor());
+   setcolor(9);
 
    outtextxy(140, 160, "Catch It");
 
@@ -531,7 +599,7 @@ void intro()
 
   outtextxy(40, 300, "Loading...");
 
-  setfillstyle(4, BLUE);
+  setfillstyle(8, RED);
 
   for(i=90; i<=getmaxx()-80; i++)
   {
