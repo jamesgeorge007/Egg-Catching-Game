@@ -102,7 +102,7 @@ void showHighScore()
 
   file_read = fopen("score.txt","r");
 
-  score = (int) getc(file_read);
+  fscanf(file_read, "%d", &score);
 
   sprintf(score_text, "%d", score);
 
@@ -135,12 +135,15 @@ void setHighScore(int current_score)
 
   file_read = fopen("score.txt", "r");
 
-  current_high_score = (int) getc(file_read);
+  //current_high_score = (int) getc(file_read);
+
+   fscanf(file_read, "%d", &current_high_score);
 
   if(current_score > current_high_score)
   {
 	file_write = fopen("score.txt", "w");
-	putc(current_score, file_write);
+	//fputc(current_score, file_write);
+	fprintf(file_write, "%d", current_score);
 	fclose(file_write);
   }
   fclose(file_read);
@@ -164,7 +167,7 @@ void game_play()
 
   settextstyle(10, 0, 9);
 
-  outtextxy(240, 100, "1");
+  outtextxy(240, 100, "3");
 
   delay(1000);
 
@@ -184,7 +187,7 @@ void game_play()
 
   settextstyle(10, 0, 9);
 
-  outtextxy(240, 100, "3");
+  outtextxy(240, 100, "1");
 
   delay(1000);
 
@@ -251,10 +254,13 @@ void game_play()
 	  case 'a':
 		pos -= k;
 		break;
+
 	  case 'd':
 		 pos += k;
 		 break;
+
 	  case 'x':
+		setHighScore(score);
 		main_menu();
 		break;
 	}
@@ -296,7 +302,7 @@ void game_play()
 			sprintf(result, "Your Score is %d.", score);
 			settextstyle(10, 0, 6);
 			setcolor(random(15));
-			outtextxy(getmaxx()/2-280,getmaxy()/2-130, "GAME OVER");
+			outtextxy(getmaxx()/2-240,getmaxy()/2-130, "GAME OVER");
 
 			settextstyle(6, 0, 6);
 			outtextxy(getmaxx()/2-200, getmaxy()/2, result);
@@ -576,9 +582,9 @@ void intro()
     cleardevice();
    }
 
-    position = getmaxy()/2+45;
+    position = getmaxy()/2-300;
 
-    for(k=1;k<=6;k++)
+    for(k=1;k<=3;k++)
 	{
 
 	 ellipse_x = random(getmaxx()-90);
