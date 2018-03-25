@@ -279,7 +279,7 @@ void game_play()
 
      // Checking whether egg falls within the basket.
 
-     if(egg_x + 80 >= x && egg_x - 100 <= x && egg_y + 45 >= basket_y && egg_y - 45 <= basket_y + 90)
+     if(egg_x + 80 >= x && egg_x - 100 <= x && egg_y + 45 >= basket_y && egg_y - 23 <= basket_y + 45)
      {
 	// Game play ends only when a black egg falls on the basket.
 
@@ -501,7 +501,7 @@ void main_menu()
 
 void intro()
 {
-  int gd=DETECT, gm, i, j, color=15;
+  int gd=DETECT, gm, i, j, k,color=15, ellipse_x, ellipse_y, position;
 
   // Autodetect
   // Initializing the graphics driver as well as mode.
@@ -553,6 +553,7 @@ void intro()
 /*  color=0;
 
    for(i=-80; i<=80; i++)
+
    {
      setcolor(color);
      outtextxy(140, i, "Catch It");
@@ -566,6 +567,51 @@ void intro()
    }
 
    */
+   setfillstyle(1, 5);
+
+   for(i=-120;i<=getmaxy()/2-90;i++)
+   {
+    sector(getmaxx()/2-90, i*2, 180, 360, 90, 90);
+    delay(10);
+    cleardevice();
+   }
+
+    position = getmaxy()/2+45;
+
+    for(k=1;k<=6;k++)
+	{
+
+	 ellipse_x = random(getmaxx()-90);
+
+		if(ellipse_x<=90)
+		   ellipse_x += 90;
+
+	 ellipse_y = -30;
+
+	 for(j=-90;j<=position;j++)
+	    {
+		setfillstyle(1, k+3);
+
+		ellipse_y = j*12;
+
+		if(ellipse_y>=position)
+		    ellipse_y = getmaxy()+60;
+
+		fillellipse(ellipse_x, ellipse_y, 30, 45);
+
+		setfillstyle(1, k);
+
+		sector(ellipse_x, position, 180, 360, 90, 90);
+
+		delay(6);
+		cleardevice();
+	    }
+
+	}
+
+   delay(2000);
+
+   cleardevice();
 
    for(i=-120, j=getmaxy()+50; i<=160; i++, j--)
    {
