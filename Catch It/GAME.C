@@ -1,4 +1,6 @@
-
+/*
+ <<****  Developed by James George  ****>>
+*/
 
 // Uses Files to store High Score.
 
@@ -53,7 +55,7 @@ void instructions()
 
   settextstyle(6, 0, 4);
 
-  setcolor(random(15));
+  setcolor(3);
 
   outtextxy(7, 120, "1. Use A and D to move the basket either ways.");
 
@@ -61,19 +63,19 @@ void instructions()
 
   outtextxy(7, 160, "2. Catch as many eggs as you can.");
 
-  setcolor(random(15));
+  setcolor(4);
 
   outtextxy(7, 200, "3. Avoid black colored Eggs.");
 
-  setcolor(random(15));
+  setcolor(5);
 
   outtextxy(7, 240, "4. There are overall 3 lives available.");
 
-  setcolor(random(15));
+  setcolor(6);
 
   outtextxy(7, 280, "5. Press X to exit while on the game play.");
 
-  setcolor(random(15));
+  setcolor(7);
 
   outtextxy(20, 360, "Press any key to return to the main menu.");
 
@@ -153,7 +155,6 @@ void setHighScore(int current_score)
   if(current_score > current_high_score)
   {
 	file_write = fopen("score.txt", "w");
-	//fputc(current_score, file_write);
 	fprintf(file_write, "%d", current_score);
 	fclose(file_write);
   }
@@ -315,6 +316,7 @@ void game_play()
 			setcolor(random(15));
 			outtextxy(getmaxx()/2-240,getmaxy()/2-130, "GAME OVER");
 
+			setcolor(3);
 			settextstyle(6, 0, 6);
 			outtextxy(getmaxx()/2-200, getmaxy()/2, result);
 
@@ -494,7 +496,7 @@ void main_menu()
 
 	 break;
 
-    default:
+  /*  default:
 
 	 settextstyle(8, 0, 5);
 
@@ -507,11 +509,11 @@ void main_menu()
 	 outtextxy(50, getmaxy()/2 + 120, "Invalid option given");
 	 line(getmaxx() - 100, getmaxy()/2 +120, getmaxx() - 100, getmaxy() - 40);
 	 line(50, getmaxy() - 40, getmaxx() - 100, getmaxy() - 40);
-
-	 repeat = 0;
-	 delay(1000);
-	 main_menu();
+    */
   }
+  repeat = 0;
+  delay(1000);
+  main_menu();
 }
 
 // Intro window.
